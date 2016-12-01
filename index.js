@@ -1,7 +1,7 @@
 const now = Date.now();
 const start = process.hrtime();
-const seconds = Math.floor(now / 1000);
-const ms = (now % 1000) * 1000 * 1000;
+const currentSeconds = Math.floor(now / 1000);
+const currentUs = (now % 1000) * 1000 * 1000;
 
 function pad(value, length) {
   const str = '00000000000000000'.substring(0, length);
@@ -9,17 +9,20 @@ function pad(value, length) {
   return str.substring(0, length - v.length) + v;
 }
 
-function ns() {
+function ns(v) {
   const arr = process.hrtime(start);
-  const ns = pad(`${arr[1] + ms}`, 9);
-  return `${seconds + arr[0]}${ns}`;
+  const ns = pad(`${arr[1] + currentUs}`, 9);
+  return `${currentSeconds + arr[0]}${ns}`;
 }
 
-function us() {
+function us(v) {
   return ns().substring(0, 16);
 }
 
 function minus(a, b) {
+  if (!a || !b) {
+    throw new Error('The agrument can not be null');
+  }
   /* istanbul ignore if */
   if (a.length !== b.length) {
     throw new Error('The length of minus item should be the same');
