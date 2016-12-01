@@ -2,7 +2,8 @@ const now = Date.now();
 const start = process.hrtime();
 const currentSeconds = Math.floor(now / 1000);
 const currentUs = (now % 1000) * 1000 * 1000;
-const tenNS = 10 * 1000 * 1000 * 100;
+const oneSecond = 1000 * 1000 * 1000;
+
 function pad(value, length) {
   const str = '00000000000000000'.substring(0, length);
   const v = '' + value;
@@ -13,8 +14,8 @@ function ns(v) {
   const arr = process.hrtime(start);
 
   const ns = arr[1] + currentUs;
-  if (ns >= tenNS) {
-    return `${currentSeconds + arr[0] + 1}${pad(ns - tenNS, 9)}`;
+  if (ns >= oneSecond) {
+    return `${currentSeconds + arr[0] + 1}${pad(ns - oneSecond, 9)}`;
   }
   return `${currentSeconds + arr[0]}${pad(ns, 9)}`;
 }
